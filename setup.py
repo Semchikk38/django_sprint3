@@ -7,6 +7,5 @@ setup(
     include_package_data=True,
     install_requires=[
         "Django>=4.0",
-        # другие зависимости из requirements.txt
     ],
 )
