@@ -1,32 +1,21 @@
 from django.shortcuts import render, get_object_or_404
-from django.utils import timezone
+
 from .models import Post, Category
+from .utils import get_published_posts_with_relations
+from .constants import INDEX_POSTS_LIMIT
 
 
 def index(request):
-    post_list = Post.objects.select_related(
-        'category', 'location', 'author'
-    ).filter(
-        pub_date__lte=timezone.now(),
-        is_published=True,
-        category__is_published=True
-    )[:5]
-
-    context = {'post_list': post_list}
-    return render(request, 'blog/index.html', context)
+    post_list = get_published_posts_with_relations()[:INDEX_POSTS_LIMIT]
+    return render(request, 'blog/index.html', {'post_list': post_list})
 
 
 def post_detail(request, post_id):
     post = get_object_or_404(
-        Post.objects.select_related('category', 'location', 'author'),
-        id=post_id,
-        pub_date__lte=timezone.now(),
-        is_published=True,
-        category__is_published=True
+        get_published_posts_with_relations(),
+        id=post_id
     )
-
-    context = {'post': post}
-    return render(request, 'blog/detail.html', context)
+    return render(request, 'blog/detail.html', {'post': post})
 
 
 def category_posts(request, category_slug):
@@ -36,13 +25,12 @@ def category_posts(request, category_slug):
         is_published=True
     )
 
-    post_list = Post.objects.select_related(
-        'category', 'location', 'author'
-    ).filter(
-        category=category,
-        pub_date__lte=timezone.now(),
-        is_published=True
+    post_list = get_published_posts_with_relations().filter(
+        category=category
     )
 
-    context = {'category': category, 'post_list': post_list}
-    return render(request, 'blog/category.html', context)
+    return render(
+        request,
+        'blog/category.html',
+        {'category': category, 'post_list': post_list}
+    )
