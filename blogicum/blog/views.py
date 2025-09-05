@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 
-from .models import Post, Category
+from .models import Category
 from .utils import get_published_posts_with_relations
 from .constants import INDEX_POSTS_LIMIT
 
