@@ -2,16 +2,18 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 from .constants import (
-    CATEGORY_TITLE_MAX_LENGTH,
-    CATEGORY_SLUG_MAX_LENGTH,
+    TITLE_MAX_LENGTH,
+    SLUG_MAX_LENGTH,
     LOCATION_NAME_MAX_LENGTH,
-    POST_TITLE_MAX_LENGTH
+    POST_TITLE_MAX_LENGTH,
+    STR_MAX_LENGTH
+
 )
 
 User = get_user_model()
 
 
-class PublishedCreatedModel(models.Model):
+class IsPublishedCreatedAtAbstract(models.Model):
     is_published = models.BooleanField(
         default=True,
         verbose_name='Опубликовано',
@@ -27,15 +29,15 @@ class PublishedCreatedModel(models.Model):
         ordering = ('created_at',)
 
 
-class Category(PublishedCreatedModel):
+class Category(IsPublishedCreatedAtAbstract):
     title = models.CharField(
-        max_length=CATEGORY_TITLE_MAX_LENGTH,
+        max_length=TITLE_MAX_LENGTH,
         verbose_name='Заголовок'
     )
     description = models.TextField(verbose_name='Описание')
     slug = models.SlugField(
         unique=True,
-        max_length=CATEGORY_SLUG_MAX_LENGTH,
+        max_length=SLUG_MAX_LENGTH,
         verbose_name='Идентификатор',
         help_text='Идентификатор страницы для URL;'
         ' разрешены символы латиницы, цифры, дефис и подчёркивание.'
@@ -46,10 +48,10 @@ class Category(PublishedCreatedModel):
         verbose_name_plural = 'Категории'
 
     def __str__(self):
-        return self.title[:20]
+        return self.title[:STR_MAX_LENGTH]
 
 
-class Location(PublishedCreatedModel):
+class Location(IsPublishedCreatedAtAbstract):
     name = models.CharField(
         max_length=LOCATION_NAME_MAX_LENGTH,
         verbose_name='Название места'
@@ -60,10 +62,10 @@ class Location(PublishedCreatedModel):
         verbose_name_plural = 'Местоположения'
 
     def __str__(self):
-        return self.name[:20]
+        return self.name[:STR_MAX_LENGTH]
 
 
-class Post(PublishedCreatedModel):
+class Post(IsPublishedCreatedAtAbstract):
     title = models.CharField(
         max_length=POST_TITLE_MAX_LENGTH,
         verbose_name='Заголовок'
@@ -100,4 +102,4 @@ class Post(PublishedCreatedModel):
         default_related_name = 'posts'
 
     def __str__(self):
-        return self.title[:20]
+        return self.title[:STR_MAX_LENGTH]

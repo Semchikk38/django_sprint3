@@ -25,9 +25,9 @@ def category_posts(request, category_slug):
         is_published=True
     )
 
-    post_list = get_published_posts_with_relations().filter(
-        category=category
-    )
+    post_list = category.posts.filter(
+        is_published=True
+    ).select_related('category', 'location', 'author')
 
     return render(
         request,
