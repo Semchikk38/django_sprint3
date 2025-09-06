@@ -2,10 +2,8 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 from .constants import (
-    TITLE_MAX_LENGTH,
+    CHAR_FIELD_MAX_LENGTH,
     SLUG_MAX_LENGTH,
-    LOCATION_NAME_MAX_LENGTH,
-    POST_TITLE_MAX_LENGTH,
     STR_MAX_LENGTH
 
 )
@@ -31,7 +29,7 @@ class IsPublishedCreatedAtAbstract(models.Model):
 
 class Category(IsPublishedCreatedAtAbstract):
     title = models.CharField(
-        max_length=TITLE_MAX_LENGTH,
+        max_length=CHAR_FIELD_MAX_LENGTH,
         verbose_name='Заголовок'
     )
     description = models.TextField(verbose_name='Описание')
@@ -53,7 +51,7 @@ class Category(IsPublishedCreatedAtAbstract):
 
 class Location(IsPublishedCreatedAtAbstract):
     name = models.CharField(
-        max_length=LOCATION_NAME_MAX_LENGTH,
+        max_length=CHAR_FIELD_MAX_LENGTH,
         verbose_name='Название места'
     )
 
@@ -67,7 +65,7 @@ class Location(IsPublishedCreatedAtAbstract):
 
 class Post(IsPublishedCreatedAtAbstract):
     title = models.CharField(
-        max_length=POST_TITLE_MAX_LENGTH,
+        max_length=CHAR_FIELD_MAX_LENGTH,
         verbose_name='Заголовок'
     )
     text = models.TextField(verbose_name='Текст')

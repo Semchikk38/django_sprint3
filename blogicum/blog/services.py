@@ -3,7 +3,7 @@ from django.utils import timezone
 from .models import Post
 
 
-def filter_published_posts_with_relations(queryset=Post.objects):
+def filter_posts_by_publication(queryset=Post.objects):
     return queryset.select_related(
         'author', 'category', 'location'
     ).filter(

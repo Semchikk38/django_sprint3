@@ -1,18 +1,18 @@
 from django.shortcuts import render, get_object_or_404
 
 from .models import Category
-from .utils import filter_published_posts_with_relations
+from .services import filter_posts_by_publication
 from .constants import INDEX_POSTS_LIMIT
 
 
 def index(request):
-    post_list = filter_published_posts_with_relations()[:INDEX_POSTS_LIMIT]
+    post_list = filter_posts_by_publication()[:INDEX_POSTS_LIMIT]
     return render(request, 'blog/index.html', {'post_list': post_list})
 
 
 def post_detail(request, post_id):
     post = get_object_or_404(
-        filter_published_posts_with_relations(),
+        filter_posts_by_publication(),
         id=post_id
     )
     return render(request, 'blog/detail.html', {'post': post})
@@ -25,9 +25,8 @@ def category_posts(request, category_slug):
         is_published=True
     )
 
-    post_list = filter_published_posts_with_relations().filter(
-        category=category
-    )
+    post_list = category.posts.all()
+
     return render(
         request,
         'blog/category.html',
