@@ -25,7 +25,8 @@ def category_posts(request, category_slug):
         is_published=True
     )
 
-    post_list = category.posts.all()
+    category_posts = category.posts.all()
+    post_list = filter_posts_by_publication(category_posts)
 
     return render(
         request,
